@@ -91,7 +91,6 @@ Para bots Python: `selenium`, `openpyxl` e `python-dotenv` devem estar instalado
 ```bash
 NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/Project_Manager/Bots/Bot.js
 NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/Almoxarifado/Bots/botAlmox.js
-NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/Almoxarifado/Bots/botAlmox_Mapeador.js
 ```
 
 **Python (Selenium) — a partir da raiz do projeto:**
@@ -149,7 +148,7 @@ python Expert_Agents/Analista_QA/Bots/human_mimic.py
 /                              ← Raiz: apenas governança e config
 ├── README.md                  ← BASE PRINCIPAL (este arquivo)
 ├── CLAUDE.md                  ← Guia técnico para Claude Code
-├── GEMINI.md                  ← Cabeçalho de governança
+├── GEMINI.md                  ← Guia técnico para Gemini
 ├── .env                       ← Credenciais locais (nunca versionado)
 │
 ├── DadosProjeto/              ← TODOS os arquivos de entrada do projeto
