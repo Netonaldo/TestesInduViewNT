@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "openai": "^6.27.0",
+    "puppeteer": "^24.38.0",
+    "xlsx": "^0.18.5"
+  }
+}
