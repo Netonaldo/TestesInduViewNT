@@ -1,0 +1,123 @@
+[
+  {
+    "id": "QA-01",
+    "nome": "Tela não mostra os grupos nem os trabalhadores",
+    "tipo": "Regra de Negócio",
+    "severidade": "Crítico",
+    "prioridade": 1,
+    "descricao": "A tela exibe só contadores numéricos — 'Leituras realizadas' e 'Leituras necessárias' — sem grupos ou nomes.",
+    "impacto": "O líder pode registrar alguém que não está no grupo sem perceber.",
+    "recomendacao": "Na obra, a unidade de controle real é o trabalhador dentro de um grupo, não um número agregado de leituras.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-02",
+    "nome": "Botão de QR Code não está associado a nenhum grupo",
+    "tipo": "Regra de Negócio",
+    "severidade": "Crítico",
+    "prioridade": 1,
+    "descricao": "O botão 'Liberar por QR Code' aparece solto na tela, sem que o app peça a seleção de um grupo antes da leitura.",
+    "impacto": "O sistema salva a leitura sem saber a qual grupo ela pertence.",
+    "recomendacao": "Na lógica da obra, liberar alguém é sempre liberar uma pessoa dentro de um grupo específico. Sem esse vínculo, o registro não tem valor operacional.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-03",
+    "nome": "Botão de liberação manual aparece como opção normal na tela",
+    "tipo": "Regra de Negócio",
+    "severidade": "Alto",
+    "prioridade": 2,
+    "descricao": "O botão 'Liberar manualmente' tem a mesma visibilidade do botão de QR Code, como se fossem opções de mesmo peso.",
+    "impacto": "Com o tempo, o controle de presença por QR Code deixa de ser usado.",
+    "recomendacao": "A liberação manual existe como recurso de exceção. Quando o caminho de exceção fica visualmente equiparado ao principal, a exceção vira regra.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-04",
+    "nome": "Liberação manual não registra o motivo",
+    "tipo": "Regra de Negócio",
+    "severidade": "Alto",
+    "prioridade": 2,
+    "descricao": "O app registra a liberação manual sem perguntar o motivo. 'QR Code com defeito' e 'crachá perdido' ficam indistintos no histórico.",
+    "impacto": "O crachá perdido circula sem que ninguém saiba.",
+    "recomendacao": "Os dois cenários têm consequências diferentes: um é operacional, o outro é de segurança e exige providências administrativas da empresa.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-05",
+    "nome": "Texto sugere que todo o grupo precisa ser liberado antes de continuar",
+    "tipo": "UX / Fluxo",
+    "severidade": "Alto",
+    "prioridade": 2,
+    "descricao": "O texto 'você percisa realizar as leituras de QR Code necessárias para iniciar a jornada' passa a ideia de que é preciso liberar todo o grupo antes de qualquer coisa.",
+    "impacto": "O líder pode usar liberações manuais indevidas só para 'desbloquear' o sistema.",
+    "recomendacao": "Na obra, os trabalhadores chegam em horários diferentes. O processo de liberação é contínuo — quem chega é liberado na hora.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-06",
+    "nome": "Erro de escrita: \"percisa\" no lugar de \"precisa\"",
+    "tipo": "UX / Conteúdo",
+    "severidade": "Médio",
+    "prioridade": 3,
+    "descricao": "A palavra 'percisa' aparece grafada incorretamente no texto principal da tela.",
+    "impacto": "Para o cliente corporativo, o erro sinaliza que a revisão não fez parte do processo de entrega.",
+    "recomendacao": "Em interfaces profissionais, a qualidade do texto é parte da qualidade do produto.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-07",
+    "nome": "Mensagem de estado offline soa como falha técnica",
+    "tipo": "Offline / UX",
+    "severidade": "Médio",
+    "prioridade": 3,
+    "descricao": "Quando sem conexão, o app exibe 'Erro ao sincronizar' com o botão 'Tentar novamente', como se houvesse uma falha técnica.",
+    "impacto": "O líder pode repetir as liberações quando a internet voltar, gerando registros duplicados.",
+    "recomendacao": "O modo offline é o comportamento normal em canteiros com sinal instável — não uma limitação. A mensagem deve refletir o que foi projetado.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-08",
+    "nome": "Contadores numéricos não identificam as pessoas por nome",
+    "tipo": "UX / Acessibilidade",
+    "severidade": "Médio",
+    "prioridade": 3,
+    "descricao": "A tela mostra só 'Leituras realizadas: 0' e 'Leituras necessárias: 5', sem nomes nem status individual.",
+    "impacto": "Em grupos maiores, o líder pode encerrar o processo com alguém sem registro.",
+    "recomendacao": "Na obra, o líder gerencia pessoas, não leituras. Saber que 'seis leituras foram feitas' não é útil sem saber quais seis pessoas são essas.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-09",
+    "nome": "Após a leitura do QR Code, o app não exibe quem foi identificado",
+    "tipo": "Segurança",
+    "severidade": "Médio",
+    "prioridade": 3,
+    "descricao": "Após a leitura, só o contador é atualizado — nenhum nome é exibido antes de o dado ser salvo.",
+    "impacto": "Se o crachá lido for de alguém fora do grupo, o erro só aparece em auditoria posterior.",
+    "recomendacao": "A leitura do QR Code é um ato de identificação. Em processos de identificação crítica, há uma verificação entre a captura e o salvamento do dado.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-10",
+    "nome": "Botão de sair (Log out) posicionado em área de toque fácil",
+    "tipo": "UX / Fluxo",
+    "severidade": "Baixo",
+    "prioridade": 4,
+    "descricao": "O botão 'Log out' está no topo da tela, área de alto risco de toque involuntário ao segurar o celular com luvas ou mãos sujas.",
+    "impacto": "Um logout acidental interrompe o processo de liberação.",
+    "recomendacao": "Ações irreversíveis usadas em contexto de campo pedem uma confirmação antes de executar.",
+    "tela": "TelaLiberaFuncionarios"
+  },
+  {
+    "id": "QA-11",
+    "nome": "Contraste do aviso offline pode ser insuficiente para uso ao sol",
+    "tipo": "Acessibilidade",
+    "severidade": "Baixo",
+    "prioridade": 4,
+    "descricao": "A barra de aviso exibida quando o app está sem conexão pode ter cores insuficientes para leitura em ambiente externo com luz solar intensa.",
+    "impacto": "O líder não consegue ler a mensagem em campo.",
+    "recomendacao": "O contexto primário de uso é o canteiro ao ar livre. A legibilidade ao sol é o critério de design para esse componente.",
+    "tela": "TelaLiberaFuncionarios"
+  }
+]
