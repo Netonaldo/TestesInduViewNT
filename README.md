@@ -91,17 +91,17 @@ Para bots Python: `selenium`, `openpyxl` e `python-dotenv` devem estar instalado
 ```bash
 NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/PS4_Almox/Bots/botAlmox.js
 # Bot de QA (Publicação no ClickUp)
-NODE_PATH="Shared_Lib/node_modules" node Shared_Lib/Bots/BotClickUpQA.js TelasApp/[NomeTela]_Proposta_QA.md
+NODE_PATH="Shared_Lib/node_modules" node Shared_Lib/Bots/botClickUpQA.js TelasApp/[NomeTela]_Proposta_QA.md
 ```
 
 **Python (Selenium) — a partir da raiz do projeto:**
 ```bash
-python Expert_Agents/PS1_Plan/Bots/check_projects.py
-python Expert_Agents/PS1_Plan/Bots/explore_planning.py
-python Expert_Agents/PS4_Almox/Bots/fetch_inventory.py
-python Expert_Agents/PS4_Almox/Bots/register_material_verified.py
-python Expert_Agents/PS7_QA/Bots/intelligent_navigator.py
-python Expert_Agents/PS7_QA/Bots/human_mimic.py
+python Expert_Agents/PS1_Plan/Bots/botCheckProjects.py
+python Expert_Agents/PS1_Plan/Bots/botExplorePlanning.py
+python Expert_Agents/PS4_Almox/Bots/botFetchInventory.py
+python Expert_Agents/PS4_Almox/Bots/botRegisterMaterial.py
+python Expert_Agents/PS7_QA/Bots/botIntelligentNavigator.py
+python Expert_Agents/PS7_QA/Bots/botHumanMimic.py
 ```
 
 ---
