@@ -1,0 +1,27 @@
+# Credenciais — NUNCA versionar
+.env
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Logs gerados pelos bots
+EquipeCampo/Expert_Agents/**/Output/*.log
+EquipeCampo/Shared_Lib/Output/*.md
+
+# Cache do Windows
+Thumbs.db
+Desktop.ini
+
+# Configurações locais de IDE/editor
+settings.local.json
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Pasta de lixo — não versionar arquivos descartados
+Trash/
