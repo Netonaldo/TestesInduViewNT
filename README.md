@@ -17,20 +17,20 @@
 - **Cronograma:** 210 dias totais (30 dias mobilização + 180 dias execução)
 - **Plataforma alvo:** IndustryView — `https://industryview.doublex.ai/dashboard`
 
-**Objetivo:** Realizar o cadastro completo e validado do projeto no IndustryView, utilizando automação (Puppeteer/Selenium) e personas IA especialistas para cada domínio. O arquivo **`DadosProjeto/Dados de Entrada/Documentos Internos/Dados de Entrada/Mestre.xlsx`** é a fonte primária de verdade para o que será aplicado no escopo, podendo indicar outras planilhas ou documentos mais detalhados para itens específicos.
+**Objetivo:** Realizar o cadastro completo e validado do projeto no IndustryView, utilizando automação (Puppeteer/Selenium) e personas IA especialistas para cada domínio. O arquivo **`DadosProjeto/Dados de Entrada/Documentos Internos/Mestre.xlsx`** é a fonte primária de verdade para o que será aplicado no escopo, podendo indicar outras planilhas ou documentos mais detalhados para itens específicos.
 
 ---
 ## 2. GOVERNANÇA MULTI-AGENTE (ORQUESTRAÇÃO)
 
-Este repositório opera com uma **arquitetura de agentes especialistas orquestrada**. O fluxo é determinado pelo **psProjectManager**, que define quem atua e em qual momento:
+Este repositório opera com uma **arquitetura de agentes especialistas orquestrada**. O fluxo é determinado pelo **PS0_PM**, que define quem atua e em qual momento:
 
-1. **Orquestração** — O **psProjectManager** recebe a solicitação, identifica a necessidade e aciona a persona correspondente (`psXXXXX`).
+1. **Orquestração** — O **PS0_PM** recebe a solicitação, identifica a necessidade e aciona a persona correspondente (`psXXXXX`).
 2. **Identificação** — Cada IA identifica qual agente corresponde à tarefa baseando-se na instrução do orquestrador.
 3. **Leitura** — O especialista lê o arquivo `psXXXXX.md` em `Expert_Agents/`.
 4. **Execução** — A execução ocorre estritamente dentro do escopo daquela persona.
 5. **Feedback** — O especialista reporta ao orquestrador ou ao usuário conforme definido no fluxo.
 
-O **psProjectManager** é o orquestrador-geral (quem e quando). Para detalhes de diretrizes, consulte `Expert_Agents/Project_Manager/psProjectManager.md`.
+O **PS0_PM** é o orquestrador-geral (quem e quando). Para detalhes de diretrizes, consulte `Expert_Agents/PS0_PM/PS0_PM.md`.
 
 ---
 
@@ -38,14 +38,14 @@ O **psProjectManager** é o orquestrador-geral (quem e quando). Para detalhes de
 
 | ESPECIALISTA | NOME (ID) | FOCO NO INDUSTRYVIEW | PERSONA (DIRETRIZ) | FONTE DE DADOS (PRIMÁRIA) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Orquestrador** | **psProjectManager** | Coordenação, Governança e Orquestração | `Expert_Agents/Project_Manager/psProjectManager.md` | **`DadosProjeto/Dados de Entrada/Documentos Internos/Dados de Entrada/Mestre.xlsx`** |
-| Planejamento | **psPlanejamento** | Schedule, Marcos e Curva S | `Expert_Agents/Planejamento/psPlanejamento.md` | **`DadosProjeto/Dados de Entrada/Documentos Internos/Dados de Entrada/Mestre.xlsx`** + `DadosProjeto/Dados de Entrada/Planilha Mestre - PDE/PD_ATK_102_25_REV02_R3_Consolidada.xlsb` |
-| Engenharia | **psEngenharia** | Specs, BOM e Controle de Documentos | `Expert_Agents/Engenharia/psEngenharia.md` | `DadosProjeto/Dados de Entrada/Proposta Técnica/PT_ATK_102_25_REV02_R0_Consolidada.pdf` + `DadosProjeto/Dados de Entrada/Documentos Internos/Dados de Entrada/ListaEncaminhamento.xlsx` |
-| Almoxarifado | **psAlmoxarifado** | Materiais e Cadeia de Suprimentos | `Expert_Agents/Almoxarifado/psAlmoxarifado.md` | `DadosProjeto/Dados de Entrada/Documentos Internos/Dados de Entrada/MatriaisATK.xlsx` |
-| RH / Mobilização | **psRH** | Cadastro e Gestão de Pessoal | `Expert_Agents/RH/psRH.md` | `DadosProjeto/Dados de Entrada/Documentos Internos/Dados de Entrada/Planej_Recrutamento.xlsx` |
-| EHS (Segurança) | **psEHS** | Riscos, Treinamentos e NRs | `Expert_Agents/EHS/psEHS.md` | `DadosProjeto/Dados de Entrada/Proposta Técnica/PT_ATK_102_25_REV02_R0_Consolidada.pdf` (Seção SSMA) |
-| Ferramental | **psFerramental** | Equipamentos e Ferramental | `Expert_Agents/Ferramental/psFerramental.md` | `DadosProjeto/Dados de Entrada/Documentos Internos/Dados de Entrada/Planej_LOG.xlsx` |
-| Analista QA | **psAnalistaQA** | Testes, UX e Regras de Negócio | `Expert_Agents/Analista_QA/psAnalistaQA.md` | Logs e Telas do Sistema |
+| **Orquestrador** | **PS0_PM** | Coordenação, Governança e Orquestração | `Expert_Agents/PS0_PM/PS0_PM.md` | **`DadosProjeto/Dados de Entrada/Documentos Internos/Mestre.xlsx`** |
+| Planejamento | **PS1_Plan** | Schedule, Marcos e Curva S | `Expert_Agents/PS1_Plan/PS1_Plan.md` | **`DadosProjeto/Dados de Entrada/Documentos Internos/Mestre.xlsx`** + `DadosProjeto/Dados de Entrada/Planilha Mestre - PDE/PD_ATK_102_25_REV02_R3_Consolidada.xlsb` |
+| Engenharia | **PS2_Eng** | Specs, BOM e Controle de Documentos | `Expert_Agents/PS2_Eng/PS2_Eng.md` | `DadosProjeto/Dados de Entrada/Proposta Técnica/PT_ATK_102_25_REV02_R0_Consolidada.pdf` + `DadosProjeto/Dados de Entrada/Documentos Internos/ListaEncaminhamento.xlsx` |
+| Almoxarifado | **PS4_Almox** | Materiais e Cadeia de Suprimentos | `Expert_Agents/PS4_Almox/PS4_Almox.md` | `DadosProjeto/Dados de Entrada/Documentos Internos/MatriaisATK.xlsx` (Verificar abas) |
+| RH / Mobilização | **PS3_RH** | Cadastro e Gestão de Pessoal | `Expert_Agents/PS3_RH/PS3_RH.md` | `DadosProjeto/Dados de Entrada/Documentos Internos/Planej_Recrutamento.xlsx` |
+| EHS (Segurança) | **PS6_EHS** | Riscos, Treinamentos e NRs | `Expert_Agents/PS6_EHS/PS6_EHS.md` | `DadosProjeto/Dados de Entrada/Proposta Técnica/PT_ATK_102_25_REV02_R0_Consolidada.pdf` (Seção SSMA) |
+| Ferramental | **PS5_Ferr** | Equipamentos e Ferramental | `Expert_Agents/PS5_Ferr/PS5_Ferr.md` | `DadosProjeto/Dados de Entrada/Documentos Internos/Planej_LOG.xlsx` |
+| Analista QA | **PS7_QA** | Testes, UX e Regras de Negócio | `Expert_Agents/PS7_QA/PS7_QA.md` | Logs e Telas do Sistema |
 
 ---
 
@@ -89,18 +89,19 @@ Para bots Python: `selenium`, `openpyxl` e `python-dotenv` devem estar instalado
 
 **Node.js (Puppeteer) — a partir da raiz do projeto:**
 ```bash
-NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/Project_Manager/Bots/Bot.js
-NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/Almoxarifado/Bots/botAlmox.js
+NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/PS4_Almox/Bots/botAlmox.js
+# Bot de QA (Publicação no ClickUp)
+NODE_PATH="Shared_Lib/node_modules" node Shared_Lib/Bots/BotClickUpQA.js TelasApp/[NomeTela]_Proposta_QA.md
 ```
 
 **Python (Selenium) — a partir da raiz do projeto:**
 ```bash
-python Expert_Agents/Planejamento/Bots/check_projects.py
-python Expert_Agents/Planejamento/Bots/explore_planning.py
-python Expert_Agents/Almoxarifado/Bots/fetch_inventory.py
-python Expert_Agents/Almoxarifado/Bots/register_material_verified.py
-python Expert_Agents/Analista_QA/Bots/intelligent_navigator.py
-python Expert_Agents/Analista_QA/Bots/human_mimic.py
+python Expert_Agents/PS1_Plan/Bots/check_projects.py
+python Expert_Agents/PS1_Plan/Bots/explore_planning.py
+python Expert_Agents/PS4_Almox/Bots/fetch_inventory.py
+python Expert_Agents/PS4_Almox/Bots/register_material_verified.py
+python Expert_Agents/PS7_QA/Bots/intelligent_navigator.py
+python Expert_Agents/PS7_QA/Bots/human_mimic.py
 ```
 
 ---
@@ -156,19 +157,19 @@ python Expert_Agents/Analista_QA/Bots/human_mimic.py
 │       ├── Documentos Internos/
 │       │   └── Dados de Entrada/        ← FONTES PRIMÁRIAS INTERNAS
 │       │       ├── Mestre.xlsx          ← FONTE PRIMÁRIA DE ESCOPO
-│       │       ├── MatriaisATK.xlsx     ← psAlmoxarifado
-│       │       ├── Planej_Recrutamento.xlsx ← psRH
-│       │       ├── Planej_LOG.xlsx      ← psFerramental
+│       │       ├── MatriaisATK.xlsx     ← PS4_Almox (Catálogo e Abas)
+│       │       ├── Planej_Recrutamento.xlsx ← PS3_RH
+│       │       ├── Planej_LOG.xlsx      ← PS5_Ferr
 │       │       ├── THEO.xlsx            ← (a mapear — sem dono)
-│       │       ├── ListaEncaminhamento.xlsx ← psEngenharia
+│       │       ├── ListaEncaminhamento.xlsx ← PS2_Eng
 │       │       └── Matriz Responsabilidade.xlsx
 │       ├── Planilha Mestre - PDE/
-│       │   └── PD_ATK_102_25_REV02_R3_Consolidada.xlsb ← psPlanejamento
+│       │   └── PD_ATK_102_25_REV02_R3_Consolidada.xlsb ← PS1_Plan
 │       ├── Proposta Técnica/
-│       │   └── PT_ATK_102_25_REV02_R0_Consolidada.pdf  ← psEngenharia / psEHS
+│       │   └── PT_ATK_102_25_REV02_R0_Consolidada.pdf  ← PS2_Eng / PS6_EHS
 │       └── Documentos Externos/
 │           └── Documentação_Rev01/Planilha_Equalização/
-│               └── 2420-209.EQ.001.xlsx ← psEngenharia (equalização)
+│               └── 2420-209.EQ.001.xlsx ← PS2_Eng (equalização)
 │
 ├── Expert_Agents/             ← Um subdiretório por agente especialista
 │   └── [NomeAgente]/

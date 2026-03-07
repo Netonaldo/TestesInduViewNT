@@ -1,6 +1,6 @@
 /**
  * BotClickUpQA.js — Cria 1 task consolidada no ClickUp com os issues do QA
- * Uso: NODE_PATH="Shared_Lib/node_modules" node Shared_Lib/Bots/BotClickUpQA.js <caminho_issues.json>
+ * Uso: NODE_PATH="Shared_Lib/node_modules" node Shared_Lib/Bots/BotClickUpQA.js <caminho_QA.md>
  *
  * Hierarquia ClickUp:
  *   Workspace: Doublex - Oficial
@@ -16,12 +16,22 @@ require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') })
 const TOKEN      = process.env.CLICKUP_TOKEN
 const SPACE_NOME = 'Sunview Pro (atk)'
 const STATUS     = 'TESTE NETO'
-const jsonArg    = process.argv[2]
+const mdArg      = process.argv[2]
 
-if (!TOKEN)   { console.error('❌ CLICKUP_TOKEN não encontrado no .env'); process.exit(1) }
-if (!jsonArg) { console.error('❌ Informe o caminho do _issues.json'); process.exit(1) }
+if (!TOKEN)  { console.error('❌ CLICKUP_TOKEN não encontrado no .env'); process.exit(1) }
+if (!mdArg)  { console.error('❌ Informe o caminho do _QA.md'); process.exit(1) }
 
-const ISSUES = JSON.parse(fs.readFileSync(path.resolve(jsonArg), 'utf8'))
+const md = fs.readFileSync(path.resolve(mdArg), 'utf8')
+
+// Título da task: extrai da linha "# QA — TelaAPP: ..."
+const titleMatch = md.match(/^#\s+(.+)$/m)
+const nome       = titleMatch ? titleMatch[1].trim() : 'QA Análise'
+
+// Descrição: tudo após "## Experiência do Usuário"
+const marker = '## Experiência do Usuário'
+const idx    = md.indexOf(marker)
+if (idx < 0) { console.error('❌ Seção "Experiência do Usuário" não encontrada'); process.exit(1) }
+const descricao = `**Experiência do Usuário**\n\n${md.slice(idx + marker.length).trim()}`
 
 async function api(method, url, body) {
   const res = await fetch(`https://api.clickup.com/api/v2${url}`, {
@@ -34,16 +44,11 @@ async function api(method, url, body) {
 }
 
 async function main() {
-  const { teams } = await api('GET', '/team')
+  const { teams }  = await api('GET', '/team')
   const { spaces } = await api('GET', `/team/${teams[0].id}/space?archived=false`)
-  const space = spaces.find(s => s.name === SPACE_NOME)
-  const { lists } = await api('GET', `/space/${space.id}/list?archived=false`)
-  const lista = lists[0]
-
-  const nome = `QA ${ISSUES[0]?.tela || 'Análise'}`
-  const descricao = ISSUES.map((issue, i) =>
-    `${i + 1}- ${issue.nome.replace(/^\[QA-\d+\]\s*/, '')}`
-  ).join('\n')
+  const space      = spaces.find(s => s.name === SPACE_NOME)
+  const { lists }  = await api('GET', `/space/${space.id}/list?archived=false`)
+  const lista      = lists[0]
 
   const task = await api('POST', `/list/${lista.id}/task`, {
     name: nome,

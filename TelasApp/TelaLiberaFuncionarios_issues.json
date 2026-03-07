@@ -78,28 +78,6 @@
   },
   {
     "id": "QA-08",
-    "nome": "Contadores numéricos não identificam as pessoas por nome",
-    "tipo": "UX / Acessibilidade",
-    "severidade": "Médio",
-    "prioridade": 3,
-    "descricao": "A tela mostra só 'Leituras realizadas: 0' e 'Leituras necessárias: 5', sem nomes nem status individual.",
-    "impacto": "Em grupos maiores, o líder pode encerrar o processo com alguém sem registro.",
-    "recomendacao": "Na obra, o líder gerencia pessoas, não leituras. Saber que 'seis leituras foram feitas' não é útil sem saber quais seis pessoas são essas.",
-    "tela": "TelaLiberaFuncionarios"
-  },
-  {
-    "id": "QA-09",
-    "nome": "Após a leitura do QR Code, o app não exibe quem foi identificado",
-    "tipo": "Segurança",
-    "severidade": "Médio",
-    "prioridade": 3,
-    "descricao": "Após a leitura, só o contador é atualizado — nenhum nome é exibido antes de o dado ser salvo.",
-    "impacto": "Se o crachá lido for de alguém fora do grupo, o erro só aparece em auditoria posterior.",
-    "recomendacao": "A leitura do QR Code é um ato de identificação. Em processos de identificação crítica, há uma verificação entre a captura e o salvamento do dado.",
-    "tela": "TelaLiberaFuncionarios"
-  },
-  {
-    "id": "QA-10",
     "nome": "Botão de sair (Log out) posicionado em área de toque fácil",
     "tipo": "UX / Fluxo",
     "severidade": "Baixo",
@@ -107,17 +85,6 @@
     "descricao": "O botão 'Log out' está no topo da tela, área de alto risco de toque involuntário ao segurar o celular com luvas ou mãos sujas.",
     "impacto": "Um logout acidental interrompe o processo de liberação.",
     "recomendacao": "Ações irreversíveis usadas em contexto de campo pedem uma confirmação antes de executar.",
-    "tela": "TelaLiberaFuncionarios"
-  },
-  {
-    "id": "QA-11",
-    "nome": "Contraste do aviso offline pode ser insuficiente para uso ao sol",
-    "tipo": "Acessibilidade",
-    "severidade": "Baixo",
-    "prioridade": 4,
-    "descricao": "A barra de aviso exibida quando o app está sem conexão pode ter cores insuficientes para leitura em ambiente externo com luz solar intensa.",
-    "impacto": "O líder não consegue ler a mensagem em campo.",
-    "recomendacao": "O contexto primário de uso é o canteiro ao ar livre. A legibilidade ao sol é o critério de design para esse componente.",
     "tela": "TelaLiberaFuncionarios"
   }
 ]

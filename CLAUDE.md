@@ -32,19 +32,20 @@ OPENAI_API_KEY=
 
 ### Node.js (Puppeteer)
 ```bash
-NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/Project_Manager/Bots/Bot.js
-NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/Almoxarifado/Bots/botAlmox.js
+NODE_PATH="Shared_Lib/node_modules" node Expert_Agents/PS4_Almox/Bots/botAlmox.js
+# Bot de QA (Publicação no ClickUp)
+NODE_PATH="Shared_Lib/node_modules" node Shared_Lib/Bots/BotClickUpQA.js TelasApp/[NomeTela]_Proposta_QA.md
 ```
 
 ### Python (Selenium)
 ```bash
-python Expert_Agents/Planejamento/Bots/check_projects.py
-python Expert_Agents/Planejamento/Bots/explore_planning.py
-python Expert_Agents/Almoxarifado/Bots/fetch_inventory.py
-python Expert_Agents/Almoxarifado/Bots/register_material_verified.py
-python Expert_Agents/Analista_QA/Bots/intelligent_navigator.py
-python Expert_Agents/Analista_QA/Bots/human_mimic.py
-python Expert_Agents/Analista_QA/Bots/explorer_bot_v2.py
+python Expert_Agents/PS1_Plan/Bots/check_projects.py
+python Expert_Agents/PS1_Plan/Bots/explore_planning.py
+python Expert_Agents/PS4_Almox/Bots/fetch_inventory.py
+python Expert_Agents/PS4_Almox/Bots/register_material_verified.py
+python Expert_Agents/PS7_QA/Bots/intelligent_navigator.py
+python Expert_Agents/PS7_QA/Bots/human_mimic.py
+python Expert_Agents/PS7_QA/Bots/explorer_bot_v2.py
 ```
 
 ### Ferramenta de descoberta de UI (mapeamento de telas)
@@ -62,7 +63,7 @@ Não há runner de testes nem linter configurado neste projeto.
 
 ### Multi-agente orquestrado
 
-8 personas especialistas (`psXXXXX.md`), cada uma dona de um módulo do IndustryView e de uma fonte de dados específica. O **psProjectManager** é o orquestrador — ele define quem age e quando. Para a tabela de delegação documento→agente, ver `Expert_Agents/Project_Manager/psProjectManager.md`.
+8 personas especialistas (`psXXXXX.md`), cada uma dona de um módulo do IndustryView e de uma fonte de dados específica. O **PS0_PM** é o orquestrador — ele define quem age e quando. Para a tabela de delegação documento→agente, ver `Expert_Agents/PS0_PM/PS0_PM.md`.
 
 **Fluxo de dados:**
 ```

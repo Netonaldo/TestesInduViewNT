@@ -111,4 +111,4 @@ A tela inicial do líder deve exibir:
 
 ## Para o Agente QA
 
-Ver análise completa em `TelasApp/TelaLiberaFuncionarios_QA.md` (a ser gerado pelo psAnalistaQA).
+Ver análise completa em `TelasApp/TelaLiberaFuncionarios_QA.md` (a ser gerado pelo PS7_QA).
