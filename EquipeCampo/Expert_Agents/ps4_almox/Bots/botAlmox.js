@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const xlsx = require('xlsx');
+const path = require('path');
 const paths = require('../../../Shared_Lib/Utils/paths');
 
 // Carregar variáveis de ambiente usando o utilitário central
@@ -9,15 +10,16 @@ require('dotenv').config({ path: paths.ENV_PATH });
     console.log("[Almox] Iniciando Bot de Cadastro de Materiais (botAlmox.js)");
 
     // Lendo dados da planilha Excel
-    const sheetArgument = process.argv[2] || 'Encaminhamento';
-    const filePath = path.join(paths.DADOS_PROJETO, 'Dados de Entrada', 'Documentos Internos', 'MatriaisATK.xlsx');
+    const filePath = process.argv[2] ? path.resolve(process.argv[2]) : path.join(paths.DADOS_PROJETO, 'Dados de Entrada', 'Documentos Internos', 'MatriaisATK.xlsx');
+    const sheetArgument = process.argv[3] || 'Encaminhamento';
+    
     let materiais = [];
     try {
         const workbook = xlsx.readFile(filePath);
         // Tenta achar a aba pelo argumento ou usa a primeira
         const sheetNameFound = workbook.SheetNames.includes(sheetArgument) ? sheetArgument : workbook.SheetNames[0];
         
-        console.log(`[INFO] Lendo aba '${sheetNameFound}' de MatriaisATK.xlsx`);
+        console.log(`[INFO] Lendo arquivo '${filePath}', aba '${sheetNameFound}'`);
         
         const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetNameFound], { defval: "" });
 
@@ -119,33 +121,51 @@ require('dotenv').config({ path: paths.ENV_PATH });
         // FUNÇÃO DE PREENCHIMENTO BASEADA EM PLACEHOLDER COM LIMPEZA E FALLBACK
         const preencher = async (placeholder, valor) => {
             if (!valor) return;
-            // Tenta placeholder insensível a maiúsculas (flag 'i' no CSS)
             const selector = `input[placeholder*="${placeholder}" i], textarea[placeholder*="${placeholder}" i]`;
-            try {
-                await page.waitForSelector(selector, { timeout: 1500 });
-                await page.click(selector, { clickCount: 3 }); // Seleciona tudo
-                await page.keyboard.press('Backspace');        // Apaga
-                await page.type(selector, String(valor), { delay: 10 });
-                console.log(`  > [OK] Campo '${placeholder}' preenchido (CSS).`);
-                return;
-            } catch (e) {
-                // Se falhou por placeholder, tenta achar o input logo após a Label
-            }
+            const maxRetries = 3;
+            
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    let targetElement = null;
+                    
+                    // Estratégia 1: CSS Selector
+                    try {
+                        const el = await page.$(selector);
+                        if (el) targetElement = el;
+                    } catch (e) {}
 
-            try {
-                const xpathLabel = `//label[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${placeholder.toLowerCase()}')]/following::input[1] | //label[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${placeholder.toLowerCase()}')]/following::textarea[1]`;
-                const [inputEl] = await page.$$('::-p-xpath(' + xpathLabel + ')');
-                if (inputEl) {
-                    await inputEl.click({ clickCount: 3 });
-                    await page.keyboard.press('Backspace');
-                    await inputEl.type(String(valor), { delay: 10 });
-                    console.log(`  > [OK] Campo '${placeholder}' preenchido (XPath Label).`);
-                } else {
-                    console.log(`  > [FALHA] Campo '${placeholder}' não encontrado na tela.`);
+                    // Estratégia 2: XPath Label Fallback
+                    if (!targetElement) {
+                        const xpathLabel = `//label[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${placeholder.toLowerCase()}')]/following::input[1] | //label[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${placeholder.toLowerCase()}')]/following::textarea[1]`;
+                        const [el] = await page.$$('::-p-xpath(' + xpathLabel + ')');
+                        if (el) targetElement = el;
+                    }
+
+                    if (targetElement) {
+                        try {
+                            await targetElement.evaluate(el => el.scrollIntoView());
+                        } catch (e) {} // Ignora se o nodo já desanexou aqui pra pegar no try principal
+                        
+                        await targetElement.click({ clickCount: 3 });
+                        await page.keyboard.press('Backspace');
+                        await targetElement.type(String(valor), { delay: 10 });
+                        console.log(`  > [OK] Campo '${placeholder}' preenchido.`);
+                        return; // Sucesso, sai do loop
+                    } else {
+                        console.log(`  > [FALHA] Campo '${placeholder}' não encontrado na tela.`);
+                        return; // Não achou, não adianta tentar de novo
+                    }
+                } catch (e) {
+                    if (e.message.includes('detached')) {
+                        console.log(`  > [AVISO] Elemento '${placeholder}' desanexado do DOM (React re-render). Tentativa ${i+1}/${maxRetries}...`);
+                        await new Promise(r => setTimeout(r, 500)); // Aguarda o re-render
+                    } else {
+                        console.log(`  > [FALHA] Erro interativo no campo '${placeholder}': ${e.message}`);
+                        return;
+                    }
                 }
-            } catch (e) {
-                console.log(`  > [FALHA] Campo '${placeholder}' erro no fallback: ${e.message}`);
             }
+            console.log(`  > [ERRO] Falha persistente ao tentar preencher '${placeholder}' após ${maxRetries} tentativas.`);
         };
 
         // FUNÇÃO DE FORMATAÇÃO DE MOEDA (0.000,00)
@@ -258,10 +278,10 @@ require('dotenv').config({ path: paths.ENV_PATH });
             const cod = item['Código'] || item['CÓDIGO'] || item['Codigo'] || "";
             const desc = item['Descrição'] || item['DESCRIÇÃO'] || item['Descricao NF'] || item['Descricao'] || "";
             const und = item['Unidade'] || item['UNIDADE'] || item['Und'] || item['UND'] || "";
-            const categoria = item['Categoria'] || item['CATEGORIA'] || item['Cat'] || item['CAT'] || item['Tipo'] || "";
+            const categoria = item['Categoria/Técnico'] || item['Categoria'] || item['CATEGORIA'] || item['Cat'] || item['CAT'] || item['Tipo'] || "";
             const fabricante = item['Fabricante'] || item['FABRICANTE'] || "";
-            const qtd = item['ESTOQUE'] || item['Estoque'] || item['Quantidade'] || "";
-            const qtdMinima = item['Est. Minimo'] || item['Est. Mínimo'] || item['Quantidade Mínima'] || "";
+            const qtd = item['ESTOQUE'] || item['Estoque'] || item['Quantidade'] || item['Quant'] || "";
+            const qtdMinima = item['Est. Minimo'] || item['Est. Mínimo'] || item['Quantidade Mínima'] || item['Est. Mínim'] || "";
 
             console.log(`\n--- [${i + 1}/${itensParaCadastrar.length}] Processando: ${cod} ---`);
 
@@ -362,22 +382,22 @@ require('dotenv').config({ path: paths.ENV_PATH });
                     const cest = item['CEST'] || "";
                     if (cest) await preencher('CEST', cest);
 
-                    const preco = item['Preço Custo'] || item['Preço de Custo'] || "";
+                    const preco = item['Preço Custo'] || item['Preço de Custo'] || item['Preço Cust'] || "";
                     if (preco !== "") {
                         const precoFormatado = formatarMoedaBR(preco);
                         await preencher('Custo', precoFormatado);
                     }
 
-                    const origem = item['Ind. Origem'] || "";
+                    const origem = item['Ind. Origem'] || item['Ind. Origer'] || "";
                     if (origem) await selecionarDropdown('Origem', origem);
 
-                    const custodia = item['Tipo Custódia'] || "";
+                    const custodia = item['Tipo Custódia'] || item['Tipo Custó'] || "";
                     if (custodia) await selecionarDropdown('Custódia', custodia);
 
                     const lote = item['Lote'] || item['Lote/Batelada'] || "";
                     if (lote) await preencher('Lote', lote);
 
-                    const classifFiscal = item['Classif. Fiscal'] || item['Classificação Fiscal'] || "";
+                    const classifFiscal = item['Classif. Fiscal'] || item['Classificação Fiscal'] || item['Classif. Fis'] || "";
                     if (classifFiscal) {
                         // Tenta dropdown primeiro, as vezes é combobox
                         await selecionarDropdown('Classificação Fiscal', classifFiscal);
